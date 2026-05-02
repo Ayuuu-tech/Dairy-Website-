@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     const res = await loginUser(credentials);
+    if (res.data.token) localStorage.setItem('token', res.data.token);
     setUser(res.data.user);
     return res.data;
   };
@@ -38,12 +39,14 @@ export const AuthProvider = ({ children }) => {
   const loginWithOtp = async (email, otp) => {
     const { verifyOtpApi } = await import('../api/auth');
     const res = await verifyOtpApi({ email, otp });
+    if (res.data.token) localStorage.setItem('token', res.data.token);
     setUser(res.data.user);
     return res.data;
   };
 
   const register = async (userData) => {
     const res = await registerUser(userData);
+    if (res.data.token) localStorage.setItem('token', res.data.token);
     setUser(res.data.user);
     return res.data;
   };
@@ -54,11 +57,13 @@ export const AuthProvider = ({ children }) => {
     } catch {
       // Even if API fails, clear local state
     }
+    localStorage.removeItem('token');
     setUser(null);
   };
 
   const googleLogin = async (credential) => {
     const res = await googleLoginApi({ credential });
+    if (res.data.token) localStorage.setItem('token', res.data.token);
     setUser(res.data.user);
     return res.data;
   };

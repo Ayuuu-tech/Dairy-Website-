@@ -187,7 +187,7 @@ exports.verifyOtp = async (req, res) => {
     
     // eslint-disable-next-line no-unused-vars
     const { password_hash, ...safeUser } = user;
-    res.json({ message: 'Login successful', user: safeUser });
+    res.json({ message: 'Login successful', user: safeUser, token });
   } catch (error) {
     console.error('Verify OTP error:', error);
     res.status(500).json({ message: 'Server error during verification' });
@@ -227,7 +227,7 @@ exports.register = async (req, res) => {
 
     const token = generateToken(rows[0].id);
     setCookie(res, token);
-    res.status(201).json({ message: 'Registration successful', user: rows[0] });
+    res.status(201).json({ message: 'Registration successful', user: rows[0], token });
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ message: 'Server error during registration' });
@@ -264,7 +264,7 @@ exports.login = async (req, res) => {
     setCookie(res, token);
 
     const { password_hash, ...safeUser } = user;
-    res.json({ message: 'Login successful', user: safeUser });
+    res.json({ message: 'Login successful', user: safeUser, token });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error during login' });
@@ -274,7 +274,12 @@ exports.login = async (req, res) => {
 
 
 exports.logout = (req, res) => {
-  res.cookie('token', '', { httpOnly: true, expires: new Date(0) });
+  res.cookie('token', '', { 
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === 'production', 
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', 
+    expires: new Date(0) 
+  });
   res.json({ message: 'Logged out successfully' });
 };
 

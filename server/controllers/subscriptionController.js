@@ -10,8 +10,8 @@ exports.createSubscription = async (req, res) => {
     }
 
     const { rows } = await db.query(
-      `INSERT INTO subscriptions (user_id, product_id, plan_type, quantity, start_date)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO subscriptions (user_id, product_id, plan_type, quantity, start_date, status)
+       VALUES ($1, $2, $3, $4, $5, 'active')
        RETURNING *`,
       [req.user.id, product_id, plan_type, quantity || 1, start_date || new Date()]
     );
