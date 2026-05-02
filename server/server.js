@@ -58,12 +58,12 @@ app.use((req, res) => {
   res.status(404).json({ message: `Route not found: ${req.method} ${req.path}` });
 });
 
-// ─── Start Server (Local) or Export for Vercel ─────────────────
-if (process.env.NODE_ENV !== 'production') {
+// ─── Start Server (Local/Render) or Export for Vercel ─────────────────
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 DairyFresh server running on port ${PORT}`);
-    console.log(`📡 API available at http://localhost:${PORT}/api`);
+    console.log(`📡 API available at http://0.0.0.0:${PORT}/api`);
   });
 }
 
