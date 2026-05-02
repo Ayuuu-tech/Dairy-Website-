@@ -55,7 +55,7 @@ exports.sendOtp = async (req, res) => {
 
     if (process.env.RESEND_API_KEY) {
       const { data, error } = await resend.emails.send({
-        from: process.env.EMAIL_FROM || 'DairyFresh <onboarding@resend.dev>',
+        from: process.env.EMAIL_FROM || 'DairyFresh <auth@rahulyadav7900.tech>',
         to: emailLower,
         subject: `${otp} is your DairyFresh verification code`,
         html: `
